@@ -30,43 +30,43 @@ namespace Discord_Token_Checker
 
             Console.WriteLine($"{Watermark}\n");
 
-            if (args.Length == 0)
+            if (args.Length == 0) /* Check If Args (Dropped File) == None/0 */
             {
                 Console.WriteLine("\n  Drag And Drop A Text File With Tokens To Begin");
                 Thread.Sleep(5000);
                 Process.GetCurrentProcess().Kill();
             }
 
-            foreach (string Tokens in File.ReadAllLines(args[0]))
+            foreach (string Tokens in File.ReadAllLines(args[0])) /* Read Each Line Of Dropped File */
             {
                 try
                 {
                     using (var Client = new WebClient { Proxy = null })
                     {
                         Client.Headers.Add("Content-Type", "application/json");
-                        Client.Headers.Add(HttpRequestHeader.Authorization, Tokens);
-                        string Result = Client.DownloadString("https://discord.com/api/v8/users/@me");
+                        Client.Headers.Add(HttpRequestHeader.Authorization, Tokens); /* Add Auth Headers */
+                        string Result = Client.DownloadString("https://discord.com/api/v8/users/@me"); /* Download Result As String */
 
-                        if (!Result.Contains("Unauthorized"))
+                        if (!Result.Contains("Unauthorized")) /* Result Dosen't = Unauthorized */
                         {
-                            Valid++;
-                            Total++;
+                            Valid++; /* Add 1 To Valid And Total */
+                            Total++; 
 
                             Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"  {Tokens}");
-                            File.AppendAllText("./ValidTokens.txt", $"{Tokens}\n");
+                            Console.WriteLine($"  {Tokens}"); 
+                            File.AppendAllText("./ValidTokens.txt", $"{Tokens}\n"); /* Append Working Token To File */
                         }
                     }
                 }
                 catch
                 {
-                    Invalid++;
+                    Invalid++; /* Add 1 To Invalid Amount And Total */
                     Total++;
 
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"  {Tokens}");
                 }
-                Console.Title = $"Discord Token Checker - (Valid : {Valid}, Invalid : {Invalid}, Total : {Total}) | ImmuneLion318#0001";
+                Console.Title = $"Discord Token Checker - (Valid : {Valid}, Invalid : {Invalid}, Total : {Total}) | ImmuneLion318#0001"; /* Set Console Title */
             }
 
             Console.ReadLine();
